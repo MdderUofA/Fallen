@@ -9,7 +9,6 @@ class DrawController extends MinigameController { // controls the minigame
         }
             
         super.onEngineCreate();
-        this.achievement = true;
         this.instructiontext = $engine.createRenderable(this,new PIXI.Text("WAIT! " + String(60), $engine.getDefaultSubTextStyle()),false);
         this.instructiontext.anchor.x=0.5
         this.instructiontext.x = $engine.getWindowSizeX()/2;
@@ -71,11 +70,11 @@ class DrawController extends MinigameController { // controls the minigame
         if(!won) {
             this.setLossReason("Try following the lines next time.")
         }
-        if(!this.alternate && this.achievement && this.calcWin()>=0.9){
-            greenworks.activateAchievement("DRAW_1_MINIGAME", function() { console.log("Success!")}, function(err) { console.log(err) })
+        if(!this.alternate && !this.hasCheated() && this.calcWin()>=0.9){
+            $engine.activateAchievement("DRAW_1_MINIGAME", function() { console.log("Success!")}, function(err) { console.log(err) })
         }
-        if(this.alternate && this.achievement && this.getTimer().getTimeRemaining() >= 360){
-            greenworks.activateAchievement("DRAW_2_MINIGAME", function() { console.log("Success!")}, function(err) { console.log(err) })
+        if(this.alternate && !this.hasCheated() && this.getTimer().getTimeRemaining() >= 360){
+            $engine.activateAchievement("DRAW_2_MINIGAME", function() { console.log("Success!")}, function(err) { console.log(err) })
         }
         this.endMinigame(won);
         if(!this.alternate)
@@ -186,7 +185,6 @@ class DrawController extends MinigameController { // controls the minigame
         this.instructiontext.alpha=1;
         if(this.hasCheated()) {
             this.instructiontext.text = "Summary: Drawing " + String(ind+1)+" -> Score = " +String(draw.baseScore).substring(0,4);
-            DrawController.getInstance().achievement = false
         } else {
             this.instructiontext.text = "Summary: Drawing " + String(ind+1)+" -> Score = " +String(draw.score).substring(0,4) + "\n("+
                                 String(draw.baseScore).substring(0,4)+" accuracy - "+String(draw.basePenalty).substring(0,4) +" extra distance "+")";

@@ -176,7 +176,7 @@ class SkyBuildPlayer extends EngineInstance {
                 this.angle = EngineUtils.interpolate(fac,this.dropAngle,0,EngineUtils.INTERPOLATE_OUT) + EngineUtils.randomRange(-0.125,0.125)*(1-fac);
                 var offset = 0;
                 if(SkyMinigameController.getInstance().hasCheated()) {
-                    SkyMinigameController.getInstance().achievement = false
+                    SkyMinigameController.getInstance().achievement = false;
                     offset = EngineUtils.interpolate(fac,0,this.targetXDiff, EngineUtils.INTERPOLATE_OUT_QUAD)
                 }
                 this.x = this.dropX + EngineUtils.randomRange(-18,18) * (1-fac) + offset;
@@ -222,8 +222,8 @@ class SkyBuildPlayer extends EngineInstance {
                         SkyMinigameController.nCamY = -100 * (SkyMinigameController.score-3)-100;
                     }
                     if(SkyMinigameController.score>=SkyMinigameController.maxScore) {
-                        if(SkyMinigameController.achievement){
-                            greenworks.activateAchievement("SAND_CASTLE_MINIGAME", function() { console.log("Success!")}, function(err) { console.log(err) })
+                        if(SkyMinigameController.getInstance().achievement){
+                            $engine.activateAchievement("SAND_CASTLE_MINIGAME", function() { console.log("Success!")}, function(err) { console.log(err) })
                         }
                         SkyMinigameController.getInstance().getTimer().stopTimer();
                         SkyMinigameController.nCamY = SkyMinigameController.pCamY;

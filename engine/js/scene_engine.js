@@ -3,6 +3,8 @@
 /** @type {Scene_Engine} */
 var $engine;
 
+var greenworks = greenworks || {};
+
 /** @type {Object} */
 var $__engineData = {}
 $__engineData.__textureCache = {};
@@ -303,6 +305,18 @@ class Scene_Engine extends Scene_Base {
     update() {
         // RPG MAKER
         super.update();
+
+        var achieveNum = 0;
+        var achievements = greenworks.getAchievementNames ? greenworks.getAchievementNames() : [];
+        for(let i = 0; i < achievements.length; i++){
+            if(greenworks.getAchievement(achievements[i], function() { console.log("Success!")}, function(err) { console.log(err) })){
+                achieveNum++;
+            }        
+        }
+
+        if(achieveNum == 29){
+            $engine.activateAchievement("ALL_ACHIEVEMENTS", function() { console.log("Success!")}, function(err) { console.log(err) })
+        }
 
         // ENGINE
         if(this.__shouldChangeRooms && !this.isBusy())
@@ -1543,6 +1557,12 @@ class Scene_Engine extends Scene_Base {
         return this._fadeDuration > 0;
     }
 
+    activateAchievement(achievement, success, fail) {
+        if(greenworks.activateAchievement) {
+            greenworks.activateAchievement(achievement, success, fail);
+        }
+    }
+
     /**
      * Creates and returns a new Object which may be passed in to a PIXI.Text as the style.
      * 
@@ -2628,6 +2648,9 @@ Game_Interpreter.prototype.clear = function() {
         if(item.persistent)
             $engine.__gainItem(item);
         SoundManager.playShop();
+        if($engine.hasItem(ENGINE_ITEMS.SUNGLASSES)) {
+            greenworks.activateAchievement("SUNGLASSES", function() { console.log("Success!")}, function(err) { console.log(err) })
+        }
         this._goldWindow.refresh();
         this._statusWindow.refresh();
         this._buyWindow._shopGoods = $engine.__getAllPurchasableItems();
