@@ -1,6 +1,8 @@
 class IntroMinigameController extends MinigameController {
     onEngineCreate() {
         $engine.unlockMinigame(ENGINE_MINIGAMES.TUTORIAL)
+        const steamworks = require('steamworks.js')
+        const client = steamworks.init(2584590)
         super.onEngineCreate();
         var text = new PIXI.Text("Start at the top of the drain pipe. \n Use the mouse to traverse the drain and TOUCH \n the junk clog to grab it. Make it down and back up \n without hitting the pipe walls.",$engine.getDefaultTextStyle())
         this.setInstructionRenderable(text);
@@ -173,6 +175,8 @@ class IntroMinigameController extends MinigameController {
             this.trailColour= 0;
             if(this.mouseInZoneBounds() && this.hasGoal) {
                 this.endMinigame(true)
+                greenworks.activateAchievement("INTRO_MINIGAME");
+                client.achievement.activate("INTRO_MINIGAME");
             }
         }
 
